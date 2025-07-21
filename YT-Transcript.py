@@ -1,5 +1,6 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import urlparse, parse_qs
+import os
 from Defaults import *
 
 def GetVideoID(url:str):
@@ -22,15 +23,22 @@ def TurnDataToText(fullData):
     transcript = ""
     for snippet in fullData:
         transcript += snippet.text
+        
+    transcript = transcript.replace("[Music]", "")
     return transcript
 
 def CreateTXTFile(name:str, text:str):
     try:
         fileLocation = "OutputFiles/Transcriptions/"+name+"-Transcript.txt"
-        open(fileLocation, "x")
-        with open(fileLocation, "w") as newFile:
-            newFile.write(text)
-        return newFile
+
+        if not os.path.exists(fileLocation):
+            open(fileLocation, "x")
+            with open(fileLocation, "w") as newFile:
+                newFile.write(text)
+            return newFile
+        else:
+            print("A file by that name already exists")
+            return None
     except Exception as err:
         LogError(err)
         return None
