@@ -16,9 +16,28 @@ def GetDataTranscriptFromID(id:str):
 
     return transcript
 
+def TurnDataToText(fullData):
+    transcript = ""
+    for snippet in fullData:
+        transcript += snippet.text
+    return transcript
+
+def CreateTXTFile(name:str, text:str):
+    try:
+        fileLocation = "OutputFiles/Transcriptions/"+name+"-Transcript.txt"
+        open(fileLocation, "x")
+        with open(fileLocation, "w") as newFile:
+            newFile.write(text)
+        return newFile
+    except Exception as err:
+        print(err)
+        return None
+
 videoURL = input("Video URL: ")
 videoID = GetVideoID(videoURL)
 transcriptFullData = GetDataTranscriptFromID(videoID)
+transcript = TurnDataToText(transcriptFullData)
+fileName = input("File Name: ")
+file = CreateTXTFile(fileName,transcript)
 
-for snippet in transcriptFullData:
-    print(snippet.text)
+
