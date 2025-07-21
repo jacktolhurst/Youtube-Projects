@@ -1,5 +1,6 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import urlparse, parse_qs
+from Defaults import *
 
 def GetVideoID(url:str):
     try:
@@ -7,7 +8,8 @@ def GetVideoID(url:str):
         videoID = parse_qs(parsedUrl.query).get("v", [None])[0]
 
         return videoID
-    except:
+    except Exception as err:
+        LogError(err)
         return None
 
 def GetDataTranscriptFromID(id:str):
@@ -30,7 +32,7 @@ def CreateTXTFile(name:str, text:str):
             newFile.write(text)
         return newFile
     except Exception as err:
-        print(err)
+        LogError(err)
         return None
 
 videoURL = input("Video URL: ")
